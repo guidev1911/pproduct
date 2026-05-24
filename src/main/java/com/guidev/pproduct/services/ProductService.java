@@ -1,6 +1,9 @@
 package com.guidev.pproduct.services;
 
+import com.guidev.pproduct.dto.CreateProductRequest;
+import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.entity.Product;
+import com.guidev.pproduct.repository.CategoryRepository;
 import com.guidev.pproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -22,21 +26,50 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
-    public Product create(Product product) {
+    public Product create(CreateProductRequest request) {
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        Product product = Product.builder()
+                .name(request.getName())
+                .sku(request.getSku())
+                .barcode(request.getBarcode())
+                .description(request.getDescription())
+                .brand(request.getBrand())
+                .category(category)
+                .price(request.getPrice())
+                .discountPrice(request.getDiscountPrice())
+                .stockQuantity(request.getStockQuantity())
+                .minimumStock(request.getMinimumStock())
+                .imageUrl(request.getImageUrl())
+                .featured(request.getFeatured())
+                .build();
+
         return productRepository.save(product);
     }
 
-    public Product update(Long id, Product product) {
+    public Product update(Long id, CreateProductRequest request) {
 
-        Product existingProduct = findById(id);
+        Product product = findById(id);
 
-        existingProduct.setName(product.getName());
-        existingProduct.setDescription(product.getDescription());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setStockQuantity(product.getStockQuantity());
-        existingProduct.setImageUrl(product.getImageUrl());
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        return productRepository.save(existingProduct);
+        product.setName(request.getName());
+        product.setSku(request.getSku());
+        product.setBarcode(request.getBarcode());
+        product.setDescription(request.getDescription());
+        product.setBrand(request.getBrand());
+        product.setCategory(category);
+        product.setPrice(request.getPrice());
+        product.setDiscountPrice(request.getDiscountPrice());
+        product.setStockQuantity(request.getStockQuantity());
+        product.setMinimumStock(request.getMinimumStock());
+        product.setImageUrl(request.getImageUrl());
+        product.setFeatured(request.getFeatured());
+
+        return productRepository.save(product);
     }
 
     public void delete(Long id) {

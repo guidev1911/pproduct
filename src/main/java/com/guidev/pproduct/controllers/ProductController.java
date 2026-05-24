@@ -28,24 +28,15 @@ public class ProductController {
 
     @PostMapping
     public Product create(@RequestBody @Valid CreateProductRequest request) {
-
-        Product product = Product.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .stockQuantity(request.getStockQuantity())
-                .sku(request.getSku())
-                .imageUrl(request.getImageUrl())
-                .build();
-
-        return productService.create(product);
+        return productService.create(request);
     }
+
     @PutMapping("/{id}")
     public Product update(
             @PathVariable Long id,
-            @RequestBody Product product
+            @RequestBody @Valid CreateProductRequest request
     ) {
-        return productService.update(id, product);
+        return productService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
