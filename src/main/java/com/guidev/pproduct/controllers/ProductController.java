@@ -1,7 +1,9 @@
 package com.guidev.pproduct.controllers;
 
+import com.guidev.pproduct.dto.CreateProductRequest;
 import com.guidev.pproduct.entity.Product;
 import com.guidev.pproduct.services.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +27,19 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
+    public Product create(@RequestBody @Valid CreateProductRequest request) {
+
+        Product product = Product.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .stockQuantity(request.getStockQuantity())
+                .sku(request.getSku())
+                .imageUrl(request.getImageUrl())
+                .build();
+
         return productService.create(product);
     }
-
     @PutMapping("/{id}")
     public Product update(
             @PathVariable Long id,
