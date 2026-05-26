@@ -1,6 +1,8 @@
 package com.guidev.pproduct.services;
 
+import com.guidev.pproduct.dto.CategorySummaryResponse;
 import com.guidev.pproduct.dto.CreateProductRequest;
+import com.guidev.pproduct.dto.ProductResponse;
 import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.entity.Product;
 import com.guidev.pproduct.repository.CategoryRepository;
@@ -77,5 +79,28 @@ public class ProductService {
         Product product = findById(id);
 
         productRepository.delete(product);
+    }
+    private ProductResponse toResponse(Product product) {
+
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .sku(product.getSku())
+                .barcode(product.getBarcode())
+                .description(product.getDescription())
+                .brand(product.getBrand())
+                .price(product.getPrice())
+                .discountPrice(product.getDiscountPrice())
+                .stockQuantity(product.getStockQuantity())
+                .featured(product.getFeatured())
+
+                .category(
+                        CategorySummaryResponse.builder()
+                                .id(product.getCategory().getId())
+                                .name(product.getCategory().getName())
+                                .slug(product.getCategory().getSlug())
+                                .build()
+                )
+                .build();
     }
 }
