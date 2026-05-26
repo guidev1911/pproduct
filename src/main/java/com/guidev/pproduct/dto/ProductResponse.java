@@ -1,8 +1,6 @@
 package com.guidev.pproduct.dto;
 import lombok.*;
 import java.math.BigDecimal;
-import lombok.*;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -28,6 +26,8 @@ public class ProductResponse {
     private BigDecimal discountPrice;
 
     private Integer stockQuantity;
+
+    private String imageUrl;
 
     private Boolean featured;
 

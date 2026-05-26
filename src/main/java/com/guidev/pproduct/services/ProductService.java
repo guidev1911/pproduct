@@ -1,10 +1,10 @@
 package com.guidev.pproduct.services;
 
-import com.guidev.pproduct.dto.CategorySummaryResponse;
 import com.guidev.pproduct.dto.CreateProductRequest;
 import com.guidev.pproduct.dto.ProductResponse;
 import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.entity.Product;
+import com.guidev.pproduct.mapper.ProductMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import com.guidev.pproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +18,22 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductMapper productMapper;
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::toResponse)
+                .toList();
     }
 
-    public Product findById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    public ProductResponse findById(Long id) {
+
+        return productMapper.toResponse(findEntityById(id));
     }
 
-    public Product create(CreateProductRequest request) {
+    public ProductResponse create(CreateProductRequest request) {
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -48,12 +53,14 @@ public class ProductService {
                 .featured(request.getFeatured())
                 .build();
 
-        return productRepository.save(product);
+        Product saved = productRepository.save(product);
+
+        return productMapper.toResponse(saved);
     }
 
-    public Product update(Long id, CreateProductRequest request) {
+    public ProductResponse update(Long id, CreateProductRequest request) {
 
-        Product product = findById(id);
+        Product product = findEntityById(id);
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -71,36 +78,21 @@ public class ProductService {
         product.setImageUrl(request.getImageUrl());
         product.setFeatured(request.getFeatured());
 
-        return productRepository.save(product);
+        Product updated = productRepository.save(product);
+
+        return productMapper.toResponse(updated);
     }
 
     public void delete(Long id) {
 
-        Product product = findById(id);
+        Product product = findEntityById(id);
 
         productRepository.delete(product);
     }
-    private ProductResponse toResponse(Product product) {
 
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .sku(product.getSku())
-                .barcode(product.getBarcode())
-                .description(product.getDescription())
-                .brand(product.getBrand())
-                .price(product.getPrice())
-                .discountPrice(product.getDiscountPrice())
-                .stockQuantity(product.getStockQuantity())
-                .featured(product.getFeatured())
+    private Product findEntityById(Long id) {
 
-                .category(
-                        CategorySummaryResponse.builder()
-                                .id(product.getCategory().getId())
-                                .name(product.getCategory().getName())
-                                .slug(product.getCategory().getSlug())
-                                .build()
-                )
-                .build();
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 }
