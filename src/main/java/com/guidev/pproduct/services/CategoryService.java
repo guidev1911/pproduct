@@ -1,5 +1,6 @@
 package com.guidev.pproduct.services;
 
+import com.guidev.pproduct.dto.CategoryResponse;
 import com.guidev.pproduct.dto.CreateCategoryRequest;
 import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.repository.CategoryRepository;
@@ -14,22 +15,33 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<CategoryResponse> findAll() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public Category create(CreateCategoryRequest request) {
+    public CategoryResponse create(CreateCategoryRequest request) {
 
         Category category = Category.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .slug(
-                        request.getName()
-                                .toLowerCase()
-                                .replace(" ", "-")
-                )
+                .slug(request.getName().toLowerCase().replace(" ", "-"))
                 .build();
 
-        return categoryRepository.save(category);
+        Category saved = categoryRepository.save(category);
+
+        return toResponse(saved);
+    }
+
+    private CategoryResponse toResponse(Category category) {
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .slug(category.getSlug())
+                .description(category.getDescription())
+                .active(category.getActive())
+                .build();
     }
 }

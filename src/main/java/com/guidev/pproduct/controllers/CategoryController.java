@@ -1,5 +1,6 @@
 package com.guidev.pproduct.controllers;
 
+import com.guidev.pproduct.dto.CategoryResponse;
 import com.guidev.pproduct.dto.CreateCategoryRequest;
 import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.services.CategoryService;
@@ -17,14 +18,12 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<Category> findAll() {
+    public List<CategoryResponse> findAll() {
         return categoryService.findAll();
     }
 
     @PostMapping
-    public Category create(
-            @RequestBody @Valid CreateCategoryRequest request
-    ) {
+    public CategoryResponse create(@RequestBody @Valid CreateCategoryRequest request) {
         return categoryService.create(request);
     }
 }
