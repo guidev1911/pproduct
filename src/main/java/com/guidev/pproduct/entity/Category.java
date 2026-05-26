@@ -31,8 +31,7 @@ public class Category {
 
     @Column(nullable = false)
     private Boolean active;
-
-    @JsonIgnore
+    
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 

@@ -3,6 +3,7 @@ package com.guidev.pproduct.services;
 import com.guidev.pproduct.dto.CategoryResponse;
 import com.guidev.pproduct.dto.CreateCategoryRequest;
 import com.guidev.pproduct.entity.Category;
+import com.guidev.pproduct.mapper.CategoryMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,13 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     public List<CategoryResponse> findAll() {
+
         return categoryRepository.findAll()
                 .stream()
-                .map(this::toResponse)
+                .map(categoryMapper::toResponse)
                 .toList();
     }
 
@@ -32,16 +35,6 @@ public class CategoryService {
 
         Category saved = categoryRepository.save(category);
 
-        return toResponse(saved);
-    }
-
-    private CategoryResponse toResponse(Category category) {
-        return CategoryResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .slug(category.getSlug())
-                .description(category.getDescription())
-                .active(category.getActive())
-                .build();
+        return categoryMapper.toResponse(saved);
     }
 }
