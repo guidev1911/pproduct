@@ -4,6 +4,7 @@ import com.guidev.pproduct.dto.CreateProductRequest;
 import com.guidev.pproduct.dto.ProductResponse;
 import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.entity.Product;
+import com.guidev.pproduct.exceptions.ResourceNotFoundException;
 import com.guidev.pproduct.mapper.ProductMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import com.guidev.pproduct.repository.ProductRepository;
@@ -36,7 +37,7 @@ public class ProductService {
     public ProductResponse create(CreateProductRequest request) {
 
         Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         Product product = Product.builder()
                 .name(request.getName())
@@ -63,7 +64,7 @@ public class ProductService {
         Product product = findEntityById(id);
 
         Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         product.setName(request.getName());
         product.setSku(request.getSku());
@@ -93,6 +94,6 @@ public class ProductService {
     private Product findEntityById(Long id) {
 
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 }
