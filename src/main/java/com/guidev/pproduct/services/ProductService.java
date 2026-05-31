@@ -10,6 +10,8 @@ import com.guidev.pproduct.mapper.ProductMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import com.guidev.pproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +24,10 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
 
-    public List<ProductResponse> findAll() {
+    public Page<ProductResponse> findAll(Pageable pageable) {
 
-        return productRepository.findAll()
-                .stream()
-                .map(productMapper::toResponse)
-                .toList();
+        return productRepository.findAll(pageable)
+                .map(productMapper::toResponse);
     }
 
     public ProductResponse findById(Long id) {

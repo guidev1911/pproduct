@@ -5,6 +5,8 @@ import com.guidev.pproduct.dto.ProductResponse;
 import com.guidev.pproduct.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponse> findAll() {
-        return productService.findAll();
+    public Page<ProductResponse> findAll(Pageable pageable) {
+        return productService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
