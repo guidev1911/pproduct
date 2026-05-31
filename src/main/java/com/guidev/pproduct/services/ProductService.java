@@ -5,6 +5,7 @@ import com.guidev.pproduct.dto.ProductResponse;
 import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.entity.Product;
 import com.guidev.pproduct.exceptions.ResourceNotFoundException;
+import com.guidev.pproduct.exceptions.ValidationException;
 import com.guidev.pproduct.mapper.ProductMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import com.guidev.pproduct.repository.ProductRepository;
@@ -36,6 +37,14 @@ public class ProductService {
 
     public ProductResponse create(CreateProductRequest request) {
 
+        if (request.getDiscountPrice() != null
+                && request.getDiscountPrice().compareTo(request.getPrice()) > 0) {
+
+            throw new ValidationException(
+                    "Discount price cannot be greater than price"
+            );
+        }
+
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
@@ -60,6 +69,14 @@ public class ProductService {
     }
 
     public ProductResponse update(Long id, CreateProductRequest request) {
+
+        if (request.getDiscountPrice() != null
+                && request.getDiscountPrice().compareTo(request.getPrice()) > 0) {
+
+            throw new ValidationException(
+                    "Discount price cannot be greater than price"
+            );
+        }
 
         Product product = findEntityById(id);
 
