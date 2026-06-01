@@ -19,8 +19,13 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public Page<ProductResponse> findAll(Pageable pageable) {
-        return productService.findAll(pageable);
+    public Page<ProductResponse> findAll(
+            @RequestParam(required = false)
+            String name,
+
+            Pageable pageable
+    ) {
+        return productService.findAll(name, pageable);
     }
 
     @GetMapping("/{id}")

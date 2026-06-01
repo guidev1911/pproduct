@@ -24,10 +24,24 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
 
-    public Page<ProductResponse> findAll(Pageable pageable) {
+    public Page<ProductResponse> findAll(
+            String name,
+            Pageable pageable
+    ) {
 
-        return productRepository.findAll(pageable)
-                .map(productMapper::toResponse);
+        Page<Product> products;
+
+        if (name != null && !name.isBlank()) {
+            products = productRepository
+                    .findByNameContainingIgnoreCase(
+                            name,
+                            pageable
+                    );
+        } else {
+            products = productRepository.findAll(pageable);
+        }
+
+        return products.map(productMapper::toResponse);
     }
 
     public ProductResponse findById(Long id) {
