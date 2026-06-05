@@ -9,10 +9,12 @@ import com.guidev.pproduct.exceptions.ValidationException;
 import com.guidev.pproduct.mapper.ProductMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import com.guidev.pproduct.repository.ProductRepository;
+import com.guidev.pproduct.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -29,19 +31,18 @@ public class ProductService {
             Pageable pageable
     ) {
 
-        Page<Product> products;
+        Specification<Product> spec =
+                (root, query, cb) -> cb.conjunction();
 
         if (name != null && !name.isBlank()) {
-            products = productRepository
-                    .findByNameContainingIgnoreCase(
-                            name,
-                            pageable
-                    );
-        } else {
-            products = productRepository.findAll(pageable);
+            spec = spec.and(
+                    ProductSpecification.hasName(name)
+            );
         }
 
-        return products.map(productMapper::toResponse);
+        return productRepository
+                .findAll(spec, pageable)
+                .map(productMapper::toResponse);
     }
 
     public ProductResponse findById(Long id) {
