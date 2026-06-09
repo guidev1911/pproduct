@@ -13,4 +13,31 @@ public class ProductSpecification {
                         "%" + name.toLowerCase() + "%"
                 );
     }
+
+    public static Specification<Product> hasBrand(String brand) {
+
+        return (root, query, cb) ->
+                cb.like(
+                        cb.lower(root.get("brand")),
+                        "%" + brand.toLowerCase() + "%"
+                );
+    }
+
+    public static Specification<Product> isFeatured(Boolean featured) {
+
+        return (root, query, cb) ->
+                cb.equal(
+                        root.get("featured"),
+                        featured
+                );
+    }
+
+    public static Specification<Product> hasCategory(Long categoryId) {
+
+        return (root, query, cb) ->
+                cb.equal(
+                        root.get("category").get("id"),
+                        categoryId
+                );
+    }
 }

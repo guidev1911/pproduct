@@ -20,12 +20,28 @@ public class ProductController {
 
     @GetMapping
     public Page<ProductResponse> findAll(
+
             @RequestParam(required = false)
             String name,
 
+            @RequestParam(required = false)
+            String brand,
+
+            @RequestParam(required = false)
+            Boolean featured,
+
+            @RequestParam(required = false)
+            Long categoryId,
+
             Pageable pageable
     ) {
-        return productService.findAll(name, pageable);
+        return productService.findAll(
+                name,
+                brand,
+                featured,
+                categoryId,
+                pageable
+        );
     }
 
     @GetMapping("/{id}")

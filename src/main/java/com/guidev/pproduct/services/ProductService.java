@@ -28,6 +28,9 @@ public class ProductService {
 
     public Page<ProductResponse> findAll(
             String name,
+            String brand,
+            Boolean featured,
+            Long categoryId,
             Pageable pageable
     ) {
 
@@ -37,6 +40,24 @@ public class ProductService {
         if (name != null && !name.isBlank()) {
             spec = spec.and(
                     ProductSpecification.hasName(name)
+            );
+        }
+
+        if (brand != null && !brand.isBlank()) {
+            spec = spec.and(
+                    ProductSpecification.hasBrand(brand)
+            );
+        }
+
+        if (featured != null) {
+            spec = spec.and(
+                    ProductSpecification.isFeatured(featured)
+            );
+        }
+
+        if (categoryId != null) {
+            spec = spec.and(
+                    ProductSpecification.hasCategory(categoryId)
             );
         }
 
