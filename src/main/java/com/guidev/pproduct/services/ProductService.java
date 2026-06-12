@@ -4,6 +4,7 @@ import com.guidev.pproduct.dto.CreateProductRequest;
 import com.guidev.pproduct.dto.ProductResponse;
 import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.entity.Product;
+import com.guidev.pproduct.exceptions.BusinessException;
 import com.guidev.pproduct.exceptions.ResourceNotFoundException;
 import com.guidev.pproduct.exceptions.ValidationException;
 import com.guidev.pproduct.mapper.ProductMapper;
@@ -78,6 +79,12 @@ public class ProductService {
 
             throw new ValidationException(
                     "Discount price cannot be greater than price"
+            );
+        }
+
+        if (productRepository.existsBySku(request.getSku())) {
+            throw new BusinessException(
+                    "SKU already exists"
             );
         }
 
