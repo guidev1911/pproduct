@@ -3,6 +3,7 @@ package com.guidev.pproduct.services;
 import com.guidev.pproduct.dto.CategoryResponse;
 import com.guidev.pproduct.dto.CreateCategoryRequest;
 import com.guidev.pproduct.entity.Category;
+import com.guidev.pproduct.exceptions.ResourceNotFoundException;
 import com.guidev.pproduct.mapper.CategoryMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,22 @@ public class CategoryService {
         Category saved = categoryRepository.save(category);
 
         return categoryMapper.toResponse(saved);
+    }
+
+    private Category findEntityById(Long id) {
+
+        return categoryRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Category not found"
+                        )
+                );
+    }
+
+    public CategoryResponse findById(Long id) {
+
+        return categoryMapper.toResponse(
+                findEntityById(id)
+        );
     }
 }

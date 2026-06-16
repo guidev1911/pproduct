@@ -2,7 +2,6 @@ package com.guidev.pproduct.controllers;
 
 import com.guidev.pproduct.dto.CategoryResponse;
 import com.guidev.pproduct.dto.CreateCategoryRequest;
-import com.guidev.pproduct.entity.Category;
 import com.guidev.pproduct.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +31,12 @@ public class CategoryController {
     @PostMapping
     public CategoryResponse create(@RequestBody @Valid CreateCategoryRequest request) {
         return categoryService.create(request);
+    }
+
+    @GetMapping("/{id}")
+    public CategoryResponse findById(
+            @PathVariable Long id
+    ) {
+        return categoryService.findById(id);
     }
 }
