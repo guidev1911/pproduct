@@ -55,4 +55,25 @@ public class CategoryService {
                 findEntityById(id)
         );
     }
+
+    public CategoryResponse update(
+            Long id,
+            CreateCategoryRequest request
+    ) {
+
+        Category category = findEntityById(id);
+
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
+        category.setSlug(
+                request.getName()
+                        .toLowerCase()
+                        .replace(" ", "-")
+        );
+
+        Category updated =
+                categoryRepository.save(category);
+
+        return categoryMapper.toResponse(updated);
+    }
 }

@@ -39,4 +39,12 @@ public class CategoryController {
     ) {
         return categoryService.findById(id);
     }
+
+    @PutMapping("/{id}")
+    public CategoryResponse update(
+            @PathVariable Long id,
+            @RequestBody @Valid CreateCategoryRequest request
+    ) {
+        return categoryService.update(id, request);
+    }
 }
