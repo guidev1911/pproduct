@@ -76,4 +76,11 @@ public class CategoryService {
 
         return categoryMapper.toResponse(updated);
     }
+
+    public void delete(Long id) {
+
+        Category category = findEntityById(id);
+
+        categoryRepository.delete(category);
+    }
 }
