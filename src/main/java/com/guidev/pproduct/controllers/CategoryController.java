@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +30,10 @@ public class CategoryController {
         return categoryService.findAll(pageable);
     }
     @PostMapping
-    public CategoryResponse create(@RequestBody @Valid CreateCategoryRequest request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoryResponse create(
+            @RequestBody @Valid CreateCategoryRequest request
+    ) {
         return categoryService.create(request);
     }
 
@@ -49,6 +53,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
             @PathVariable Long id
     ) {
