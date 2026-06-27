@@ -3,6 +3,7 @@ package com.guidev.pproduct.services;
 import com.guidev.pproduct.dto.CategoryResponse;
 import com.guidev.pproduct.dto.CreateCategoryRequest;
 import com.guidev.pproduct.entity.Category;
+import com.guidev.pproduct.exceptions.BusinessException;
 import com.guidev.pproduct.exceptions.ResourceNotFoundException;
 import com.guidev.pproduct.mapper.CategoryMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
@@ -27,6 +28,12 @@ public class CategoryService {
     }
 
     public CategoryResponse create(CreateCategoryRequest request) {
+
+        if (categoryRepository.existsByName(request.getName())) {
+            throw new BusinessException(
+                    "Category name already exists"
+            );
+        }
 
         Category category = Category.builder()
                 .name(request.getName())
@@ -62,6 +69,16 @@ public class CategoryService {
     ) {
 
         Category category = findEntityById(id);
+
+        Category existing = categoryRepository
+                .findByName(request.getName())
+                .orElse(null);
+
+        if (existing != null && !existing.getId().equals(id)) {
+            throw new BusinessException(
+                    "Category name already exists"
+            );
+        }
 
         category.setName(request.getName());
         category.setDescription(request.getDescription());
