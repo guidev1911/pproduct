@@ -7,6 +7,7 @@ import com.guidev.pproduct.exceptions.BusinessException;
 import com.guidev.pproduct.exceptions.ResourceNotFoundException;
 import com.guidev.pproduct.mapper.CategoryMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
+import com.guidev.pproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
 
+    private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
@@ -97,6 +99,12 @@ public class CategoryService {
     public void delete(Long id) {
 
         Category category = findEntityById(id);
+
+        if (productRepository.existsByCategoryId(id)) {
+            throw new BusinessException(
+                    "Category cannot be deleted because it has associated products"
+            );
+        }
 
         categoryRepository.delete(category);
     }

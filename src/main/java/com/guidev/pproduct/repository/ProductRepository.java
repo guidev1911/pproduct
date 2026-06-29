@@ -21,4 +21,6 @@ public interface ProductRepository
             Pageable pageable
     );
 
+    boolean existsByCategoryId(Long categoryId);
+
 }
