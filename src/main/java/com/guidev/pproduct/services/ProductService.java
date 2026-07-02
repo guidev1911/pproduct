@@ -148,7 +148,9 @@ public class ProductService {
 
         Product product = findEntityById(id);
 
-        productRepository.delete(product);
+        product.setActive(false);
+
+        productRepository.save(product);
     }
 
     private Product findEntityById(Long id) {
