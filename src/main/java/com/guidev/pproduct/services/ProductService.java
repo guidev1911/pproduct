@@ -36,7 +36,7 @@ public class ProductService {
     ) {
 
         Specification<Product> spec =
-                (root, query, cb) -> cb.conjunction();
+                ProductSpecification.isActive(true);
 
         if (name != null && !name.isBlank()) {
             spec = spec.and(

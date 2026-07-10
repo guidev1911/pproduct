@@ -40,4 +40,13 @@ public class ProductSpecification {
                         categoryId
                 );
     }
+
+    public static Specification<Product> isActive(Boolean active) {
+
+        return (root, query, cb) ->
+                cb.equal(
+                        root.get("active"),
+                        active
+                );
+    }
 }
