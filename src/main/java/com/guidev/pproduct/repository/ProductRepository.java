@@ -23,4 +23,6 @@ public interface ProductRepository
 
     boolean existsByCategoryId(Long categoryId);
 
+    Optional<Product> findByIdAndActiveTrue(Long id);
+
 }

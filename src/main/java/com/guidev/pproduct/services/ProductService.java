@@ -155,7 +155,11 @@ public class ProductService {
 
     private Product findEntityById(Long id) {
 
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return productRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Product not found"
+                        )
+                );
     }
 }
