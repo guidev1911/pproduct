@@ -153,6 +153,25 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    public ProductResponse restore(Long id) {
+
+        Product product =
+                findEntityByIdIncludingInactive(id);
+
+        if (Boolean.TRUE.equals(product.getActive())) {
+            throw new BusinessException(
+                    "Product is already active"
+            );
+        }
+
+        product.setActive(true);
+
+        Product restored =
+                productRepository.save(product);
+
+        return productMapper.toResponse(restored);
+    }
+
     private Product findEntityById(Long id) {
 
         return productRepository.findByIdAndActiveTrue(id)
