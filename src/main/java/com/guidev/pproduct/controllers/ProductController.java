@@ -71,4 +71,11 @@ public class ProductController {
     public void delete(@PathVariable Long id) {
         productService.delete(id);
     }
+
+    @PatchMapping("/{id}/restore")
+    public ProductResponse restore(
+            @PathVariable Long id
+    ) {
+        return productService.restore(id);
+    }
 }
