@@ -162,4 +162,14 @@ public class ProductService {
                         )
                 );
     }
+
+    private Product findEntityByIdIncludingInactive(Long id) {
+
+        return productRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Product not found"
+                        )
+                );
+    }
 }
