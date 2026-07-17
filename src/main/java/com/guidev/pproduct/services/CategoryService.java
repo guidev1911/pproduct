@@ -106,6 +106,8 @@ public class CategoryService {
             );
         }
 
-        categoryRepository.delete(category);
+        category.setActive(false);
+
+        categoryRepository.save(category);
     }
 }
