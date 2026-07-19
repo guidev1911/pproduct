@@ -124,4 +124,21 @@ public class CategoryService {
                         )
                 );
     }
+
+    public CategoryResponse restore(Long id) {
+
+        Category category = findEntityByIdIncludingInactive(id);
+
+        if (Boolean.TRUE.equals(category.getActive())) {
+            throw new BusinessException(
+                    "Category is already active"
+            );
+        }
+
+        category.setActive(true);
+
+        Category restored = categoryRepository.save(category);
+
+        return categoryMapper.toResponse(restored);
+    }
 }

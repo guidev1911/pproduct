@@ -59,4 +59,11 @@ public class CategoryController {
     ) {
         categoryService.delete(id);
     }
+
+    @PatchMapping("/{id}/restore")
+    public CategoryResponse restore(
+            @PathVariable Long id
+    ) {
+        return categoryService.restore(id);
+    }
 }
