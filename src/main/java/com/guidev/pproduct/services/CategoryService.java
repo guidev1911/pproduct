@@ -104,12 +104,6 @@ public class CategoryService {
 
         Category category = findEntityById(id);
 
-        if (productRepository.existsByCategoryId(id)) {
-            throw new BusinessException(
-                    "Category cannot be deleted because it has associated products"
-            );
-        }
-
         category.setActive(false);
 
         categoryRepository.save(category);
