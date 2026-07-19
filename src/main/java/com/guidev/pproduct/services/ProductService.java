@@ -88,7 +88,7 @@ public class ProductService {
             );
         }
 
-        Category category = categoryRepository.findById(request.getCategoryId())
+        Category category = categoryRepository.findByIdAndActiveTrue(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         Product product = Product.builder()
@@ -123,7 +123,7 @@ public class ProductService {
 
         Product product = findEntityById(id);
 
-        Category category = categoryRepository.findById(request.getCategoryId())
+        Category category = categoryRepository.findByIdAndActiveTrue(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         product.setName(request.getName());
