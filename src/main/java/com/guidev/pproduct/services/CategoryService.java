@@ -8,6 +8,7 @@ import com.guidev.pproduct.exceptions.ResourceNotFoundException;
 import com.guidev.pproduct.mapper.CategoryMapper;
 import com.guidev.pproduct.repository.CategoryRepository;
 import com.guidev.pproduct.repository.ProductRepository;
+import com.guidev.pproduct.specification.CategorySpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,10 @@ public class CategoryService {
 
     public Page<CategoryResponse> findAll(Pageable pageable) {
 
-        return categoryRepository.findAll(pageable)
+        return categoryRepository.findAll(
+                        CategorySpecification.isActive(true),
+                        pageable
+                )
                 .map(categoryMapper::toResponse);
     }
 
@@ -50,7 +54,7 @@ public class CategoryService {
 
     private Category findEntityById(Long id) {
 
-        return categoryRepository.findById(id)
+        return categoryRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
                                 "Category not found"
