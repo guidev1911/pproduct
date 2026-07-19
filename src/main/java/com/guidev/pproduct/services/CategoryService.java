@@ -114,4 +114,14 @@ public class CategoryService {
 
         categoryRepository.save(category);
     }
+
+    private Category findEntityByIdIncludingInactive(Long id) {
+
+        return categoryRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Category not found"
+                        )
+                );
+    }
 }
