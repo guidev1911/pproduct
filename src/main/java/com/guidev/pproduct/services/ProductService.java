@@ -104,6 +104,7 @@ public class ProductService {
                 .minimumStock(request.getMinimumStock())
                 .imageUrl(request.getImageUrl())
                 .featured(request.getFeatured())
+                .active(true)
                 .build();
 
         Product saved = productRepository.save(product);
