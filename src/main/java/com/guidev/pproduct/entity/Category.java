@@ -46,20 +46,4 @@ public class Category {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-
-        if (active == null) {
-            active = true;
-        }
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }
